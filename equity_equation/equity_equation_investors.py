@@ -1,6 +1,6 @@
 import inspect
 from dataclasses import dataclass, field
-from enum import Enum
+from pathlib import Path
 from types import FrameType
 from typing import Any, cast
 
@@ -9,19 +9,13 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 from openpyxl.worksheet.worksheet import Worksheet
 
-logger = Logger(service="equity_equation")
+from ..utils.constants import Constants
+
+logger = Logger(service="equity_equation.py")
 
 # TODOs:
 # 1. Use pydantic instead
 # 2. Add formatting to cells (%, numbers, etc.)
-
-
-class Constants(Enum):
-    ACCEPT = "Accept"
-    REJECT = "Reject"
-    ONE_HUNDRED = 100
-    ZERO = 0
-    ONE = 1
 
 
 @dataclass(frozen=False)
@@ -243,6 +237,15 @@ class EquityEquation:
 
         return company_value_after_investment
 
+    @staticmethod
+    def _get_root_dir() -> str:
+        """Get the project's root directory"""
+        last_idx = -1
+        cur_dir, cdk_root = Path(__file__).parent, "equity_equation"
+        root_dir = str(next(p for p in cur_dir.parents if p.parts[last_idx] == cdk_root).parent)
+
+        return root_dir
+
     def __call__(self) -> None:
         ws, wb = self._setup_excel_workbook()
         decision_value = self._calc_req_investor_value()
@@ -278,7 +281,7 @@ class EquityEquation:
         c2.font = Font(bold=True, color="FFFFFF")
         c2 = accept_or_reject_value
 
-        wb.save(filename="equity_equation.xlsx")
+        wb.save(filename=f"{self._get_root_dir()}/equity_equation.xlsx")
 
 
 if __name__ == "__main__":
