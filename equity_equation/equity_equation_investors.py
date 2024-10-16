@@ -13,8 +13,7 @@ logger = Logger(service="equity_equation")
 
 # TODOs:
 # 1. Use pydantic instead
-# 2. Remove redundant value checks
-# 3. Add formatting to cells (%, numbers, etc.)
+# 2. Add formatting to cells (%, numbers, etc.)
 
 
 class Constants(Enum):
