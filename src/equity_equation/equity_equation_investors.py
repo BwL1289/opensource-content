@@ -241,8 +241,8 @@ class EquityEquation:
     def _get_root_dir() -> str:
         """Get the project's root directory"""
         last_idx = -1
-        cur_dir, cdk_root = Path(__file__).parent, "equity_equation"
-        root_dir = str(next(p for p in cur_dir.parents if p.parts[last_idx] == cdk_root).parent)
+        cur_dir, src = Path(__file__).parent, "src"
+        root_dir = str(next(p for p in cur_dir.parents if p.parts[last_idx] == src).parent)
 
         return root_dir
 
@@ -282,36 +282,3 @@ class EquityEquation:
         c2 = accept_or_reject_value
 
         wb.save(filename=f"{self._get_root_dir()}/equity_equation.xlsx")
-
-
-if __name__ == "__main__":
-    eeq = EquityEquation(
-        total_equity_pool=float(
-            input("""Enter the total equity pool as a percentage (total_equity_pool, between 0 and 100%): """)
-        ),
-        proposed_equity_alloc=float(
-            input(
-                """Enter the proposed equity percentage as a
-                   percentage to be given to the investor as a result
-                   of their investment in the company
-                   (proposed_equity_alloc, between 0 and 100%): """
-            )
-        ),
-        estimated_valuation_increase=float(
-            input(
-                """Enter the estimated increase in valuation of the company
-                   as a result of the investor investing,
-                   as a percentage. Said differently,
-                   how much you expect the valuation of the
-                   company to inrease after their investment
-                   (estimated_valuation_increase): """
-            )
-        ),
-        pre_money_valuation=float(
-            input(
-                """Enter the valuation of the company before the investment (the pre-money valuation)
-                   (pre_money_valuation): """
-            )
-        ),
-    )
-    eeq()
